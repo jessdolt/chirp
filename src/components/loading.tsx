@@ -31,7 +31,11 @@ export default LoadingSpinner;
 export const LoadingPage = () => {
   return (
     <div className="absolute right-0 top-0 flex h-screen w-screen flex-col  items-center justify-center gap-2">
-      <span className="animate-pulse">Loading...</span>
+      {/* <span className="animate-pulse">Loading...</span> */}
+      <span className="animate-pulse">
+        Wait mo lang mahal may papakita ako sayo ... ❤️
+      </span>
+
       <LoadingSpinner size={30} />
     </div>
   );
