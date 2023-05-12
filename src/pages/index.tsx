@@ -3,6 +3,14 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { api } from "~/utils/api";
+import { SignIn } from "@clerk/nextjs";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+} from "@clerk/nextjs";
 
 const Home: NextPage = () => {
   const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -15,10 +23,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          I <span className="text-[hsl(280,100%,70%)]">Love</span> You Lovely
-          Reyes
-        </h1>
+        {/* Mount the UserButton component */}
+        <SignedIn>
+          {/* Mount the UserButton component */}
+          <UserButton />
+        </SignedIn>
+        <SignedOut>
+          {/* Signed out users get sign in button */}
+          <SignInButton />
+        </SignedOut>
       </main>
     </>
   );
