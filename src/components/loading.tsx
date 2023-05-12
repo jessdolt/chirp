@@ -32,7 +32,11 @@ export const LoadingPage = () => {
   return (
     <div className="absolute right-0 top-0 flex h-screen w-screen flex-col  items-center justify-center gap-2">
       {/* I love you bebe ❤️ */}
-      <span className="animate-pulse">Loading...</span>
+      <span className="animate-pulse">
+        May surprise ako sayo mahal wait mo lang... ❤️
+      </span>
+
+      {/* <span className="animate-pulse">Loading...</span> */}
       <LoadingSpinner size={30} />
     </div>
   );

@@ -6,16 +6,28 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import LoadingSpinner, { LoadingPage } from "~/components/loading";
+import { useState } from "react";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
 
+  const [input, setInput] = useState<string>("");
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      ctx.posts.getAll.invalidate();
+    },
+  });
+
   if (!user) return null;
 
   return (
-    <div className="flex gap-3">
+    <div className="flex w-full gap-3">
       <Image
         width={56}
         height={56}
@@ -25,8 +37,12 @@ const CreatePostWizard = () => {
       />
       <input
         placeholder="Type Something"
-        className="grow bg-transparent text-slate-400 outline-none"
+        className="w-full flex-1 bg-transparent text-slate-400 outline-none"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
+      <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
   );
 };
@@ -51,7 +67,7 @@ const PostView = (props: PostWithUser) => {
             {dayjs(post.createdAt).fromNow()}
           </span>
         </div>
-        <span className="">{post.content}</span>
+        <span className="text-2xl">{post.content}</span>
       </div>
     </div>
   );
@@ -84,7 +100,7 @@ const Home: NextPage = () => {
       <main className="flex h-screen justify-center">
         <div className="h-full w-full border-x border-slate-400 md:max-w-2xl">
           <div className="flex border-b border-slate-400 p-4">
-            <div className="flex justify-center ">
+            <div className="r flex w-full">
               <SignedIn>
                 <CreatePostWizard />
               </SignedIn>
