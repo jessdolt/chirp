@@ -1,18 +1,18 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { api, RouterOutputs } from "~/utils/api";
+import { api } from "~/utils/api";
 import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
-import LoadingSpinner, { LoadingPage } from "~/components/loading";
+import { LoadingPage } from "~/components/loading";
 import { useState } from "react";
+import { type RouterOutputs } from "~/utils/api";
 
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
-
   const [input, setInput] = useState<string>("");
 
   const ctx = api.useContext();
