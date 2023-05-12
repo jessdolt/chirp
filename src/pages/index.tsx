@@ -5,6 +5,7 @@ import { SignedIn, SignedOut, SignInButton, useUser } from "@clerk/nextjs";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
+import LoadingSpinner, { LoadingPage } from "~/components/loading";
 
 dayjs.extend(relativeTime);
 
@@ -14,13 +15,17 @@ const CreatePostWizard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex">
+    <div className="flex gap-3">
       <Image
         width={56}
         height={56}
         src={user.profileImageUrl}
         alt="Profile Image"
         className="h-14 w-14 rounded-full"
+      />
+      <input
+        placeholder="Type Something"
+        className="grow bg-transparent text-slate-400 outline-none"
       />
     </div>
   );
@@ -52,13 +57,23 @@ const PostView = (props: PostWithUser) => {
   );
 };
 
-const Home: NextPage = () => {
+const Feed = () => {
   const { data, isLoading } = api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingPage />;
 
   if (!data) return <div>No Data Found</div>;
 
+  return (
+    <div className="flex flex-col">
+      {data?.map(({ post, author }) => (
+        <PostView post={post} author={author} key={post.id} />
+      ))}
+    </div>
+  );
+};
+
+const Home: NextPage = () => {
   return (
     <>
       <Head>
@@ -78,11 +93,7 @@ const Home: NextPage = () => {
               </SignedOut>
             </div>
           </div>
-          <div className="flex flex-col">
-            {data?.map(({ post, author }) => (
-              <PostView post={post} author={author} key={post.id} />
-            ))}
-          </div>
+          <Feed />
         </div>
       </main>
     </>
